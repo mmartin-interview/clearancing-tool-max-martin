@@ -5,33 +5,15 @@ class ClearanceBatch < ActiveRecord::Base
   has_many :items
   attr_accessor :item_errors
 
-  def clearance_items!(potential_item_ids)
-    self.item_errors = []
-    if potential_item_ids.any?
-      Item.transaction do
-        potential_item_ids.each do |potential_item_id|
-          if item_id_is_valid?(potential_item_id)
-            item = Item.find(potential_item_id)
-            item.clearance!
-            self.items << item
-          end
-        end
-      end
-    end
-  end
-
   def item_id_is_valid?(potential_item_id)
     if potential_item_id.blank? || potential_item_id == 0 || !potential_item_id.is_a?(Integer)
-      self.item_errors << "Item #{potential_item_id} is not valid"
-      return false
+      return false, "Item #{potential_item_id} is not valid"
     end
     if Item.where(id: potential_item_id).none?
-      self.item_errors << "Item #{potential_item_id} could not be found"
-      return false
+      return false, "Item #{potential_item_id} could not be found"
     end
     if Item.sellable.where(id: potential_item_id).none?
-      self.item_errors << "Item #{potential_item_id} could not be clearanced"
-      return false
+      return false, "Item #{potential_item_id} could not be clearanced"
     end
     return true
   end
