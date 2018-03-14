@@ -1,0 +1,36 @@
+<h2>Clearance Batch <%= @batch.id %> (Purchased <%= @batch.created_at.strftime("%m/%d/%Y") %>)</h2>
+
+<table class="table table-striped clearance_batch">
+  <thead>
+    <tr>
+      <th>Item</th>
+      <th>Name</th>
+      <th>Size</th>
+      <th>Color</th>
+      <th>Purchase Price</th>
+    </tr>
+  </thead>
+  <tbody>
+    <%- @items.each do |item| -%>
+      <tr>
+        <td><%= item.style.type %></td>
+        <td><%= item.style.name %></td>
+        <td><%= item.size %></td>
+        <td><%= item.color %></td>
+        <td><%= number_to_currency(item.price_sold) %></td>
+      </tr>
+    <%- end -%>
+  </tbody>
+  <tfoot>
+    <tr>
+      <td><b>TOTAL</b></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td><b><%= number_to_currency(@total_cost) %></b></td>
+    </tr>
+  </tfoot>
+</table>
+
+<%= link_to "Download CSV", clearance_batch_path(@batch, format: :csv), class: "btn btn-primary", role: "button" %>
+<%= link_to "Back to Batches", clearance_batches_path, class: "btn btn-primary", role: "button" %>

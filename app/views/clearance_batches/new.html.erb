@@ -1,0 +1,41 @@
+<h2>Create a Clearance Batch</h2>
+
+<div id="errors" class="alert alert-warning" role="alert"></div>
+
+<%= form_tag(clearance_batches_path, multipart: true, class: "form-inline", role: "form") do %>
+  <div id="tabs">
+    <ul>
+      <li><a href="#upload">Upload Batch File</a></li>
+      <li><a href="#scan">Scan Items</a></li>
+    </ul>
+      <div id="upload">
+          <br />
+          <div class="form-group">
+            <%= label_tag "csv_batch_file", "Select batch file" %>
+            <%= file_field_tag "csv_batch_file", class: "form-control" %>
+          </div>
+          <%= button_tag "Upload Batch File", class: "btn btn-primary" %>
+          <%= link_to "Cancel", clearance_batches_path, class: "btn btn-danger", role: "button" %>
+      </div>
+      <div id="scan">
+          <div id="js-item-entry">
+            <div class="clearfix js-item-group">
+              <div class="form-group col-lg-3">
+                <%= text_field_tag "item[]", "", class: "form-control js-item" %>
+              </div>
+              <div class="form-group col-lg-3">
+                <%= text_field_tag "item[]", "", class: "form-control js-item" %>
+              </div>
+              <div class="form-group col-lg-3">
+                <%= text_field_tag "item[]", "", class: "form-control js-item" %>
+              </div>
+              <div class="form-group col-lg-3">
+                <%= text_field_tag "item[]", "", class: "form-control js-item" %>
+              </div>
+            </div>
+          </div>
+          <%= button_tag "Submit Batch", class: "btn btn-primary" %>
+          <%= link_to "Cancel", clearance_batches_path, class: "btn btn-danger", role: "button" %>
+    </div>
+  </div>
+<% end %>
