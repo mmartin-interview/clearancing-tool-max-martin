@@ -14,8 +14,8 @@ describe Item do
       expect(item.status).to eq("clearanced")
     end
 
-    it "should set the price_sold as 75% of the wholesale_price" do
-      expect(item.price_sold).to eq(BigDecimal.new(wholesale_price) * BigDecimal.new("0.75"))
+    it "should set the price_sold as a percentage of the wholesale_price" do
+      expect(item.price_sold).to eq(BigDecimal.new(wholesale_price) * Item::CLEARANCE_PERCENTAGE)
     end
   end
 end

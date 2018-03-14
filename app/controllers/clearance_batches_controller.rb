@@ -7,17 +7,16 @@ class ClearanceBatchesController < ApplicationController
    end
 
   def create
-    clearance_batch = ClearanceBatch.create
     potential_item_ids = process_file(params[:csv_batch_file].tempfile)
-    clearance_batch.clearance_items!(potential_item_ids)
+    service = ClearancingService.new
+    service.process_items(potential_item_ids)
     alert_messages = []
-    if clearance_batch.item_errors && clearance_batch.item_errors.any?
-      alert_messages << "#{clearance_batch.item_errors.count} item id(s) raised errors and were not clearanced"
-      clearance_batch.item_errors.each {|error| alert_messages << error }
+    if service.clearancing_status.errors.any?
+      alert_messages << "#{service.clearancing_status.errors.count} item id(s) raised errors and were not clearanced"
+      service.clearancing_status.errors.each {|error| alert_messages << error }
       flash[:alert] = alert_messages.join("<br/>") if alert_messages.any?
     end
-    clearance_batch.reload
-    flash[:notice]  = "#{clearance_batch.items.count} item(s) clearanced in batch #{clearance_batch.id}"
+    flash[:notice]  = "#{service.clearancing_status.clearance_batch.items.count} item(s) clearanced in batch #{service.clearancing_status.clearance_batch.id}"
     redirect_to action: :index
   end
 
